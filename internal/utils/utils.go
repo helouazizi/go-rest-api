@@ -7,7 +7,7 @@ import (
 
 // Helper function to standardize error responses
 func RespondWithError(w http.ResponseWriter, statusCode int, message, details string) {
-	response := map[string]interface{}{
+	response := map[string]any{
 		"status":  "error",
 		"message": message,
 		"details": details,
