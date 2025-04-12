@@ -19,7 +19,6 @@ func NewItemHandler(itemService *services.ItemService) *ItemHandler {
 
 func (h *ItemHandler) GetAllItems(w http.ResponseWriter, r *http.Request) {
 	items := h.Service.GetAllItems()
-
 	json.NewEncoder(w).Encode(items)
 }
 
