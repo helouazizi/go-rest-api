@@ -1,7 +1,7 @@
 package main
+
 import "fmt"
 
-
-func main(){
-  fmt.Println("go-rest-api")
+func main() {
+	fmt.Println("go-rest-api")
 }
