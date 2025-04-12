@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
-	"strings"
 
 	"go-rest-api/internal/services"
 	"go-rest-api/pkg/logger"
@@ -20,11 +19,12 @@ func NewItemHandler(itemService *services.ItemService) *ItemHandler {
 
 func (h *ItemHandler) GetAllItems(w http.ResponseWriter, r *http.Request) {
 	items := h.Service.GetAllItems()
+
 	json.NewEncoder(w).Encode(items)
 }
 
 func (h *ItemHandler) GetItemById(w http.ResponseWriter, r *http.Request) {
-	idStr := strings.TrimPrefix(r.URL.Path, "/items/")
+	idStr := r.URL.Query().Get("id")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
 		logger.LogWithDetails(err)
@@ -54,7 +54,7 @@ func (h *ItemHandler) CreateItem(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *ItemHandler) DeleteItem(w http.ResponseWriter, r *http.Request) {
-	idStr := strings.TrimPrefix(r.URL.Path, "/items/")
+	idStr := r.URL.Query().Get("id")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
 		logger.LogWithDetails(err)

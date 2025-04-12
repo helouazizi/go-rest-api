@@ -19,7 +19,7 @@ func NewItemService() *ItemService {
 func (s *ItemService) GetAllItems() []models.Item {
 	s.Mu.Lock()
 	defer s.Mu.Unlock()
-	result := make([]models.Item, len(s.Items))
+	result := []models.Item{}
 	for _, item := range s.Items {
 		result = append(result, item)
 	}

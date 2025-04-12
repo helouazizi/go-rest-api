@@ -17,16 +17,22 @@ func NewRouter(deps *dependencies.Dependencies) http.Handler {
 }
 
 func registerItemRoutes(mux *http.ServeMux, deps *dependencies.Dependencies) {
-	mux.Handle("/items", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/api/items", func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:
-			deps.ItemHandler.GetAllItems(w, r)
+			if id := r.URL.Query().Get("id"); id != "" { // If an 'id' is provided as a query parameter
+				deps.ItemHandler.GetItemById(w, r) // Fetch item by ID
+			} else {
+				deps.ItemHandler.GetAllItems(w, r) // Fetch all items if no 'id' is provided
+			}
 		case http.MethodPost:
 			deps.ItemHandler.CreateItem(w, r)
+		case http.MethodDelete:
+			deps.ItemHandler.DeleteItem(w, r)
 		default:
-			http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		}
-	}))
+	})
 }
 
 // func registerUserRoutes(mux *http.ServeMux, deps *dependencies.Dependencies) {
