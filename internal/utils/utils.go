@@ -18,8 +18,8 @@ func RespondWithError(w http.ResponseWriter, statusCode int, message, details st
 }
 
 // Helper function to standardize JSON responses
-func RespondWithJSON(w http.ResponseWriter, statusCode int, result any) {
+func RespondWithJSON(w http.ResponseWriter, statusCode int, response any) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(statusCode)
-	json.NewEncoder(w).Encode(result)
+	json.NewEncoder(w).Encode(response)
 }
