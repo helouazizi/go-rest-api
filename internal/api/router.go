@@ -9,7 +9,15 @@ import (
 func NewRouter(deps *dependencies.Dependencies) http.Handler {
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/items", func(w http.ResponseWriter, r *http.Request) {
+	// Register routes by domain
+	registerItemRoutes(mux, deps)
+	// registerUserRoutes(mux, deps)
+
+	return mux
+}
+
+func registerItemRoutes(mux *http.ServeMux, deps *dependencies.Dependencies) {
+	mux.Handle("/items", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:
 			deps.ItemHandler.GetAllItems(w, r)
@@ -18,18 +26,18 @@ func NewRouter(deps *dependencies.Dependencies) http.Handler {
 		default:
 			http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 		}
-	})
-
-	mux.HandleFunc("/items/", func(w http.ResponseWriter, r *http.Request) {
-		switch r.Method {
-		case http.MethodGet:
-			deps.ItemHandler.GetItemById(w, r)
-		case http.MethodDelete:
-			deps.ItemHandler.DeleteItem(w, r)
-		default:
-			http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
-		}
-	})
-
-	return mux
+	}))
 }
+
+// func registerUserRoutes(mux *http.ServeMux, deps *dependencies.Dependencies) {
+// 	mux.Handle("/users", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+// 		switch r.Method {
+// 		case http.MethodGet:
+// 			deps.UserHandler.GetAll(w, r)
+// 		case http.MethodPost:
+// 			deps.UserHandler.Create(w, r)
+// 		default:
+// 			http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+// 		}
+// 	}))
+// }
