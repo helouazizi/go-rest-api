@@ -13,8 +13,8 @@ type Logger struct {
 }
 
 // NewLogger initializes a logger writing to a file
-func Create_Logger() (*Logger, error) {
-	file, err := os.OpenFile("server.log", os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0o666)
+func Create_Logger(logpath string) (*Logger, error) {
+	file, err := os.OpenFile(logpath, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0o666)
 	if err != nil {
 		return nil, err
 	}
