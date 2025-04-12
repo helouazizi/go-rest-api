@@ -3,18 +3,18 @@ package api
 import (
 	"net/http"
 
-	"go-rest-api/internal/handlers"
+	"go-rest-api/internal/dependencies"
 )
 
-func NewRouter(itemHandler *handlers.ItemHandler) http.Handler {
+func NewRouter(deps *dependencies.Dependencies) http.Handler {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/items", func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:
-			itemHandler.GetAllItems(w, r)
+			deps.ItemHandler.GetAllItems(w, r)
 		case http.MethodPost:
-			itemHandler.CreateItem(w, r)
+			deps.ItemHandler.CreateItem(w, r)
 		default:
 			http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 		}
@@ -23,9 +23,9 @@ func NewRouter(itemHandler *handlers.ItemHandler) http.Handler {
 	mux.HandleFunc("/items/", func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:
-			itemHandler.GetItemById(w, r)
+			deps.ItemHandler.GetItemById(w, r)
 		case http.MethodDelete:
-			itemHandler.DeleteItem(w, r)
+			deps.ItemHandler.DeleteItem(w, r)
 		default:
 			http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 		}

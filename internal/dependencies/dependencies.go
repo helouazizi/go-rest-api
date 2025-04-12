@@ -6,10 +6,6 @@ import (
 )
 
 type Dependencies struct {
-	// Services
-	ItemService *services.ItemService
-	// UserService *services.UserService
-
 	// Handlers
 	ItemHandler *handlers.ItemHandler
 	// UserHandler *handlers.UserHandler
@@ -18,16 +14,12 @@ type Dependencies struct {
 func NewDependencies() *Dependencies {
 	// Instantiate services
 	itemService := services.NewItemService()
-	// userService := services.NewUserService()
 
 	// Instantiate handlers
-	itemHandler := handlers.NewItemHandler(itemService)
-	// userHandler := handlers.NewUserHandler(userService)
-
 	return &Dependencies{
-		ItemService: itemService,
+		// ItemService: itemService,
 		// UserService:  userService,
-		ItemHandler: itemHandler,
+		ItemHandler: handlers.NewItemHandler(itemService),
 		// UserHandler:  userHandler,
 	}
 }
