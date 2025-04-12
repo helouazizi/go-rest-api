@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"go-rest-api/internal/services"
+	"go-rest-api/internal/utils"
 	"go-rest-api/pkg/logger"
 )
 
@@ -19,7 +20,7 @@ func NewItemHandler(itemService *services.ItemService) *ItemHandler {
 
 func (h *ItemHandler) GetAllItems(w http.ResponseWriter, r *http.Request) {
 	items := h.Service.GetAllItems()
-	json.NewEncoder(w).Encode(items)
+	utils.RespondWithJSON(w, http.StatusOK, items)
 }
 
 func (h *ItemHandler) GetItemById(w http.ResponseWriter, r *http.Request) {
@@ -27,15 +28,15 @@ func (h *ItemHandler) GetItemById(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
 		logger.LogWithDetails(err)
-		http.Error(w, "invalid ID", http.StatusBadRequest)
+		utils.RespondWithError(w, http.StatusBadRequest, "invalid ID", "")
 		return
 	}
 	item, found := h.Service.GetItemById(id)
 	if !found {
-		http.NotFound(w, r)
+		utils.RespondWithError(w, http.StatusFound, "item not found", "")
 		return
 	}
-	json.NewEncoder(w).Encode(item)
+	utils.RespondWithJSON(w, http.StatusOK, item)
 }
 
 func (h *ItemHandler) CreateItem(w http.ResponseWriter, r *http.Request) {
@@ -44,12 +45,11 @@ func (h *ItemHandler) CreateItem(w http.ResponseWriter, r *http.Request) {
 	}
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil || input.Name == "" {
 		logger.LogWithDetails(err)
-		http.Error(w, "invalid input", http.StatusBadRequest)
+		utils.RespondWithError(w, http.StatusBadRequest, "invalid input", "")
 		return
 	}
 	item := h.Service.CraeteItem(input.Name)
-	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(item)
+	utils.RespondWithJSON(w, http.StatusCreated, item)
 }
 
 func (h *ItemHandler) DeleteItem(w http.ResponseWriter, r *http.Request) {
@@ -57,11 +57,11 @@ func (h *ItemHandler) DeleteItem(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
 		logger.LogWithDetails(err)
-		http.Error(w, "invalid ID", http.StatusBadRequest)
+		utils.RespondWithError(w, http.StatusBadRequest, "invalid ID", "")
 		return
 	}
 	if !h.Service.DeleteItem(id) {
-		http.NotFound(w, r)
+		utils.RespondWithError(w, http.StatusFound, "item not found", "")
 		return
 	}
 	w.WriteHeader(http.StatusNoContent)
