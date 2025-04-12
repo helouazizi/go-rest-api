@@ -40,7 +40,7 @@ go run cmd/main.go
 ` http://localhost:8080` 8080 by default fell free to edit the confics
     
 ## Features
-
+- only go standard pkgs
 - simple files structur
 - clean and modular code
 - Separation of Concerns
