@@ -45,6 +45,7 @@ func (s *ItemService) CraeteItem(name string) models.Item {
 	s.NextId++
 	return item
 }
+
 func (s *ItemService) DeleteItem(id int) bool {
 	s.Mu.Lock()
 	defer s.Mu.Unlock()

@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"go-rest-api/internal/services"
+	"go-rest-api/pkg/logger"
 )
 
 type ItemHandler struct {
@@ -26,6 +27,7 @@ func (h *ItemHandler) GetItemById(w http.ResponseWriter, r *http.Request) {
 	idStr := strings.TrimPrefix(r.URL.Path, "/items/")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
+		logger.LogWithDetails(err)
 		http.Error(w, "invalid ID", http.StatusBadRequest)
 		return
 	}
@@ -42,6 +44,7 @@ func (h *ItemHandler) CreateItem(w http.ResponseWriter, r *http.Request) {
 		Name string `json:"name"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil || input.Name == "" {
+		logger.LogWithDetails(err)
 		http.Error(w, "invalid input", http.StatusBadRequest)
 		return
 	}
@@ -54,6 +57,7 @@ func (h *ItemHandler) DeleteItem(w http.ResponseWriter, r *http.Request) {
 	idStr := strings.TrimPrefix(r.URL.Path, "/items/")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
+		logger.LogWithDetails(err)
 		http.Error(w, "invalid ID", http.StatusBadRequest)
 		return
 	}
